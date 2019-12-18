@@ -30,6 +30,11 @@ public class JunkHandler implements JunkService {
   }
 
   @Override
+  public List<Junk> findByDate(String date) {
+    return junkRepository.findAllByDate(date);
+  }
+
+  @Override
   public void deleteById(Long id) {
     junkRepository.deleteById(id);
   }

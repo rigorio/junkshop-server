@@ -2,7 +2,6 @@ package io.rigor.junkshopserver.junk;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
@@ -21,4 +20,5 @@ public class Junk {
   private String material;
   private String price;
   private String weight;
+  private String date; // add by date service etc
 }

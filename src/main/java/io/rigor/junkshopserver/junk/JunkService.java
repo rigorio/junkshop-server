@@ -12,6 +12,8 @@ public interface JunkService {
 
   Optional<Junk> findById(Long id);
 
+  List<Junk> findByDate(String date);
+
   void deleteById(Long id);
 
   void delete(Junk junk);
