@@ -1,6 +1,8 @@
 package io.rigor.junkshopserver.purchase.PurchaseItem;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
+import org.springframework.data.repository.CrudRepository;
 
-public interface PurchaseItemRepository extends JpaRepository<PurchaseItem, Long> {
+@EnableScan
+public interface PurchaseItemRepository extends CrudRepository<PurchaseItem, String> {
 }

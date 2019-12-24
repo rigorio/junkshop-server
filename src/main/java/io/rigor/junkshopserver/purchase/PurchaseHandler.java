@@ -1,11 +1,12 @@
 package io.rigor.junkshopserver.purchase;
 
 import io.rigor.junkshopserver.purchase.PurchaseItem.PurchaseItemRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class PurchaseHandler implements PurchaseService<Purchase> {
@@ -19,16 +20,11 @@ public class PurchaseHandler implements PurchaseService<Purchase> {
 
   @Override
   public List<Purchase> findAll() {
-    return purchaseRepository.findAll();
+    return collectAsList(purchaseRepository.findAll());
   }
 
   @Override
-  public List<Purchase> findAll(Sort sort) {
-    return purchaseRepository.findAll(sort);
-  }
-
-  @Override
-  public Optional<Purchase> findById(Long id) {
+  public Optional<Purchase> findById(String id) {
     return purchaseRepository.findById(id);
   }
 
@@ -38,7 +34,7 @@ public class PurchaseHandler implements PurchaseService<Purchase> {
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void deleteById(String id) {
     purchaseRepository.deleteById(id);
   }
 
@@ -49,12 +45,18 @@ public class PurchaseHandler implements PurchaseService<Purchase> {
 
   @Override
   public List<Purchase> saveAll(List<Purchase> t) {
-    return purchaseRepository.saveAll(t);
+    return collectAsList(purchaseRepository.saveAll(t));
   }
 
   @Override
   public Purchase save(Purchase purchase) {
     purchaseItemRepository.saveAll(purchase.getPurchaseItems());
     return purchaseRepository.save(purchase);
+  }
+
+  private <T>List<T> collectAsList(Iterable<T> all) {
+    return StreamSupport
+        .stream(all.spliterator(), false)
+        .collect(Collectors.toList());
   }
 }

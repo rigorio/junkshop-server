@@ -1,10 +1,11 @@
 package io.rigor.junkshopserver.junk;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class JunkHandler implements JunkService {
@@ -16,16 +17,12 @@ public class JunkHandler implements JunkService {
 
   @Override
   public List<Junk> findAll() {
-    return junkRepository.findAll();
+    return collectAsList(junkRepository.findAll());
   }
 
-  @Override
-  public List<Junk> findAll(Sort sort) {
-    return junkRepository.findAll(sort);
-  }
 
   @Override
-  public Optional<Junk> findById(Long id) {
+  public Optional<Junk> findById(String id) {
     return junkRepository.findById(id);
   }
 
@@ -35,7 +32,7 @@ public class JunkHandler implements JunkService {
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void deleteById(String id) {
     junkRepository.deleteById(id);
   }
 
@@ -46,11 +43,17 @@ public class JunkHandler implements JunkService {
 
   @Override
   public List<Junk> saveAll(List<Junk> junks) {
-    return junkRepository.saveAll(junks);
+    return collectAsList(junkRepository.saveAll(junks));
   }
 
   @Override
   public Junk save(Junk junk) {
     return junkRepository.save(junk);
+  }
+
+  private List<Junk> collectAsList(Iterable<Junk> all) {
+    return StreamSupport
+        .stream(all.spliterator(), false)
+        .collect(Collectors.toList());
   }
 }

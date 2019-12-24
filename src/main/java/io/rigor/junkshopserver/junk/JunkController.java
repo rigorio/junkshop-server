@@ -1,5 +1,10 @@
 package io.rigor.junkshopserver.junk;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +19,17 @@ import java.util.List;
 public class JunkController {
   private JunkService junkService;
 
-  public JunkController(JunkService junkService) {
+  public JunkController(AmazonDynamoDB amazonDynamoDB, JunkService junkService) {
     this.junkService = junkService;
+    DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
+    CreateTableRequest tableRequest = dynamoDBMapper
+        .generateCreateTableRequest(Junk.class);
+
+    tableRequest.setProvisionedThroughput(
+        new ProvisionedThroughput(4000L, 4000L));
+
+    TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
+
   }
 
   @GetMapping()
@@ -26,7 +40,7 @@ public class JunkController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getAll(@PathVariable(required = false) Long id) {
+  public ResponseEntity<?> getAll(@PathVariable(required = false) String id) {
     if (id != null)
       return new ResponseEntity<>(junkService.findById(id), HttpStatus.OK);
     return new ResponseEntity<>(junkService.findAll(), HttpStatus.OK);
@@ -47,7 +61,7 @@ public class JunkController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> delete(@PathVariable Long id) {
+  public ResponseEntity<?> delete(@PathVariable String id) {
     junkService.deleteById(id);
     return new ResponseEntity<>(junkService.findAll(), HttpStatus.OK);
   }

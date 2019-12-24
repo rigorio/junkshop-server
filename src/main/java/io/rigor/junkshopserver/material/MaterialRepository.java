@@ -1,6 +1,8 @@
 package io.rigor.junkshopserver.material;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
+import org.springframework.data.repository.CrudRepository;
 
-public interface MaterialRepository extends JpaRepository<Material, Long> {
+@EnableScan
+public interface MaterialRepository extends CrudRepository<Material, String> {
 }

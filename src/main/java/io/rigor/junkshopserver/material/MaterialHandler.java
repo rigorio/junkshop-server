@@ -1,10 +1,11 @@
 package io.rigor.junkshopserver.material;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class MaterialHandler implements MaterialService {
@@ -16,12 +17,7 @@ public class MaterialHandler implements MaterialService {
 
   @Override
   public List<Material> findAll() {
-    return repository.findAll();
-  }
-
-  @Override
-  public List<Material> findAll(Sort sort) {
-    return repository.findAll(sort);
+    return collectAsList(repository.findAll());
   }
 
   @Override
@@ -30,7 +26,7 @@ public class MaterialHandler implements MaterialService {
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void deleteById(String id) {
     repository.deleteById(id);
   }
 
@@ -41,11 +37,17 @@ public class MaterialHandler implements MaterialService {
 
   @Override
   public List<Material> saveAll(List<Material> materials) {
-    return repository.saveAll(materials);
+    return collectAsList(repository.saveAll(materials));
   }
 
   @Override
   public Material save(Material material) {
     return repository.save(material);
+  }
+
+  private <T>List<T> collectAsList(Iterable<T> all) {
+    return StreamSupport
+        .stream(all.spliterator(), false)
+        .collect(Collectors.toList());
   }
 }
