@@ -1,5 +1,8 @@
 package io.rigor.junkshopserver.purchase;
 
+import io.rigor.junkshopserver.material.Material;
+import io.rigor.junkshopserver.material.MaterialService;
+import io.rigor.junkshopserver.purchase.PurchaseItem.PurchaseItem;
 import io.rigor.junkshopserver.purchase.PurchaseItem.PurchaseItemRepository;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +15,14 @@ import java.util.stream.StreamSupport;
 public class PurchaseHandler implements PurchaseService<Purchase> {
   private PurchaseRepository purchaseRepository;
   private PurchaseItemRepository purchaseItemRepository;
+  private MaterialService materialService;
 
-  public PurchaseHandler(PurchaseRepository purchaseRepository, PurchaseItemRepository purchaseItemRepository) {
+  public PurchaseHandler(PurchaseRepository purchaseRepository,
+                         PurchaseItemRepository purchaseItemRepository,
+                         MaterialService materialService) {
     this.purchaseRepository = purchaseRepository;
     this.purchaseItemRepository = purchaseItemRepository;
+    this.materialService = materialService;
   }
 
   @Override
@@ -50,11 +57,25 @@ public class PurchaseHandler implements PurchaseService<Purchase> {
 
   @Override
   public Purchase save(Purchase purchase) {
-    purchaseItemRepository.saveAll(purchase.getPurchaseItems());
+    List<PurchaseItem> purchaseItems = purchase.getPurchaseItems();
+    purchaseItemRepository.saveAll(purchaseItems);
+    List<Material> materials = purchaseItems
+        .stream()
+        .map(purchaseItem -> {
+          String materialName = purchaseItem.getMaterial();
+          String weight = purchaseItem.getWeight();
+          Material material = materialService.findByName(materialName);
+          Double currentWeight = Double.valueOf(material.getWeight());
+          Double takenWeight = Double.valueOf(weight);
+          material.setWeight("" + (currentWeight - takenWeight));
+          return material;
+        })
+        .collect(Collectors.toList());
+    materialService.saveAll(materials);
     return purchaseRepository.save(purchase);
   }
 
-  private <T>List<T> collectAsList(Iterable<T> all) {
+  private <T> List<T> collectAsList(Iterable<T> all) {
     return StreamSupport
         .stream(all.spliterator(), false)
         .collect(Collectors.toList());

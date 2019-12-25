@@ -15,4 +15,8 @@ public interface MaterialService {
   List<Material> saveAll(List<Material> materials);
 
   Material save(Material material);
+
+  Material addWeight(Material m, String weight);
+
+  Material findByName(String materialName);
 }

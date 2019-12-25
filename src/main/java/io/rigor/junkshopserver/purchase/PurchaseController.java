@@ -59,8 +59,6 @@ public class PurchaseController {
     if (body instanceof List) {
       ObjectMapper mapper = new ObjectMapper();
       String s = mapper.writeValueAsString(body);
-      System.out.println("eh");
-      System.out.println(s);
       List<Purchase> junks = mapper.readValue(s, new TypeReference<List<Purchase>>() {});
       return new ResponseEntity<>(purchaseService.saveAll(junks), HttpStatus.CREATED);
     }

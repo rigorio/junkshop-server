@@ -45,7 +45,22 @@ public class MaterialHandler implements MaterialService {
     return repository.save(material);
   }
 
-  private <T>List<T> collectAsList(Iterable<T> all) {
+  @Override
+  public Material addWeight(Material m, String weight) {
+    Double currentWeight = Double.valueOf(m.getWeight());
+    Double additionalWeight = Double.valueOf(weight);
+    double newWeight = currentWeight + additionalWeight;
+    m.setWeight("" + newWeight);
+    return save(m);
+  }
+
+  @Override
+  public Material findByName(String materialName) {
+    Optional<Material> allByMaterial = repository.findAllByMaterial(materialName);
+    return allByMaterial.orElse(new Material());
+  }
+
+  private <T> List<T> collectAsList(Iterable<T> all) {
     return StreamSupport
         .stream(all.spliterator(), false)
         .collect(Collectors.toList());
