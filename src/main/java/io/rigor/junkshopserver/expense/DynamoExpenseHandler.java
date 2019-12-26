@@ -22,7 +22,7 @@ public class DynamoExpenseHandler implements ExpenseService {
     DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
     CreateTableRequest tableRequest = dynamoDBMapper.generateCreateTableRequest(Expense.class);
     tableRequest.setProvisionedThroughput(
-        new ProvisionedThroughput(1000L, 1000L));
+        new ProvisionedThroughput(1L, 1L));
     TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
   }
 
@@ -65,6 +65,7 @@ public class DynamoExpenseHandler implements ExpenseService {
   public void deleteById(String id) {
     expenseRepository.deleteById(id);
   }
+
   private List<Expense> collectAsList(Iterable<Expense> all) {
     return StreamSupport
         .stream(all.spliterator(), false)

@@ -22,22 +22,8 @@ public class PurchaseController {
 
   private PurchaseService<Purchase> purchaseService;
 
-  public PurchaseController(PurchaseService<Purchase> purchaseService, AmazonDynamoDB amazonDynamoDB) {
+  public PurchaseController(PurchaseService<Purchase> purchaseService) {
     this.purchaseService = purchaseService;
-    DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
-    CreateTableRequest tableRequest = dynamoDBMapper
-        .generateCreateTableRequest(Purchase.class);
-
-    tableRequest.setProvisionedThroughput(
-        new ProvisionedThroughput(4000L, 4000L));
-
-    TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
-    tableRequest = null;
-
-    tableRequest = dynamoDBMapper.generateCreateTableRequest(PurchaseItem.class);
-    tableRequest.setProvisionedThroughput(
-        new ProvisionedThroughput(4000L, 4000L));
-    TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
   }
 
   @GetMapping()

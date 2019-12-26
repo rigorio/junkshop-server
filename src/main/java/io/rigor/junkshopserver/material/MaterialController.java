@@ -1,10 +1,5 @@
 package io.rigor.junkshopserver.material;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
-import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,16 +14,8 @@ import java.util.List;
 public class MaterialController {
   private MaterialService materialService;
 
-  public MaterialController(MaterialService materialService, AmazonDynamoDB amazonDynamoDB) {
+  public MaterialController(MaterialService materialService) {
     this.materialService = materialService;
-    DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
-    CreateTableRequest tableRequest = dynamoDBMapper
-        .generateCreateTableRequest(Material.class);
-
-    tableRequest.setProvisionedThroughput(
-        new ProvisionedThroughput(4000L, 4000L));
-
-    TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
   }
 
   @GetMapping

@@ -1,5 +1,10 @@
 package io.rigor.junkshopserver.material;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,10 +13,19 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class MaterialHandler implements MaterialService {
+public class DynamoMaterialHandler implements MaterialService {
   private MaterialRepository repository;
 
-  public MaterialHandler(MaterialRepository repository) {
+  public DynamoMaterialHandler(MaterialRepository repository,
+                               AmazonDynamoDB amazonDynamoDB) {
+    DynamoDBMapper dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
+    CreateTableRequest tableRequest = dynamoDBMapper
+        .generateCreateTableRequest(Material.class);
+
+    tableRequest.setProvisionedThroughput(
+        new ProvisionedThroughput(4L, 4L));
+
+    TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
     this.repository = repository;
   }
 
