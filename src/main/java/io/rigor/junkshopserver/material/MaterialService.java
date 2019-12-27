@@ -6,7 +6,7 @@ import java.util.Optional;
 public interface MaterialService {
   List<Material> findAll();
 
-  Optional<Material> findById(Long id);
+  Optional<Material> findById(String id);
 
   void deleteById(String id);
 

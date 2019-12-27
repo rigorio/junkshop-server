@@ -35,8 +35,8 @@ public class DynamoMaterialHandler implements MaterialService {
   }
 
   @Override
-  public Optional<Material> findById(Long id) {
-    return findById(id);
+  public Optional<Material> findById(String id) {
+    return repository.findById(id);
   }
 
   @Override
@@ -56,12 +56,14 @@ public class DynamoMaterialHandler implements MaterialService {
 
   @Override
   public Material save(Material material) {
+    if (material.getWeight() == null)
+      material.setWeight("0.0");
     return repository.save(material);
   }
 
   @Override
   public Material addWeight(Material m, String weight) {
-    Double currentWeight = Double.valueOf(m.getWeight());
+    Double currentWeight = Double.valueOf(m.getWeight() == null ? "0.0" : m.getWeight());
     Double additionalWeight = Double.valueOf(weight);
     double newWeight = currentWeight + additionalWeight;
     m.setWeight("" + newWeight);
