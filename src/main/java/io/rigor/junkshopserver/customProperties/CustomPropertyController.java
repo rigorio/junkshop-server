@@ -15,15 +15,23 @@ public class CustomPropertyController {
     this.customPropertyService = customPropertyService;
   }
 
+  @GetMapping
+  public ResponseEntity<?> getAll() {
+    return new ResponseEntity<>(customPropertyService.findAll(), HttpStatus.OK);
+  }
+
   @GetMapping("/{property}")
   public ResponseEntity<?> getValue(@PathVariable String property) {
     Optional<CustomProperty> byProperty = customPropertyService.findByProperty(property);
-    CustomProperty noProperty = new CustomProperty("no property found", "no property found");
-    return new ResponseEntity<>(byProperty.orElse(noProperty), HttpStatus.OK);
+    return new ResponseEntity<>(byProperty.orElse(new CustomProperty()), HttpStatus.OK);
   }
 
   @PostMapping
   public ResponseEntity<?> save(@RequestBody CustomProperty customProperty) {
+    Optional<CustomProperty> byProperty = customPropertyService.findByProperty(customProperty.getProperty());
+    if (byProperty.isPresent()){
+      customProperty = byProperty.get();
+    }
     return new ResponseEntity<>(customPropertyService.save(customProperty), HttpStatus.CREATED);
   }
 
