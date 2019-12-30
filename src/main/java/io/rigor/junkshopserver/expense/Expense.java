@@ -21,5 +21,7 @@ public class Expense {
   @DynamoDBAttribute
   private String amount;
   @DynamoDBAttribute
+  private String note;
+  @DynamoDBAttribute
   private String date;
 }
