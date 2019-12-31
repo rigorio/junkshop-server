@@ -71,9 +71,9 @@ public class DynamoMaterialHandler implements MaterialService {
   }
 
   @Override
-  public Material findByName(String materialName) {
-    Optional<Material> allByMaterial = repository.findAllByMaterial(materialName);
-    return allByMaterial.orElse(new Material());
+  public Optional<Material> findByName(String materialName) {
+    return repository.findAllByMaterial(materialName);
+//    return allByMaterial.orElse(new Material());
   }
 
   private <T> List<T> collectAsList(Iterable<T> all) {

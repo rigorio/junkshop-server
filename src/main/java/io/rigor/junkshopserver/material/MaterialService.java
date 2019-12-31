@@ -18,5 +18,5 @@ public interface MaterialService {
 
   Material addWeight(Material m, String weight);
 
-  Material findByName(String materialName);
+  Optional<Material> findByName(String materialName);
 }

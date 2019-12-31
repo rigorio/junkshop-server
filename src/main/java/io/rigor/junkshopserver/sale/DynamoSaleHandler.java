@@ -84,11 +84,15 @@ public class DynamoSaleHandler implements SaleService<Sale> {
         .map(saleItem -> {
           String materialName = saleItem.getMaterial();
           String weight = saleItem.getWeight();
-          Material material = materialService.findByName(materialName);
-          Double currentWeight = Double.valueOf(material.getWeight());
-          Double takenWeight = Double.valueOf(weight);
-          material.setWeight("" + (currentWeight - takenWeight));
-          return material;
+          Optional<Material> byName = materialService.findByName(materialName);
+          if (byName.isPresent()) {
+            Material material = byName.get();
+            Double currentWeight = Double.valueOf(material.getWeight());
+            Double takenWeight = Double.valueOf(weight);
+            material.setWeight("" + (currentWeight - takenWeight));
+            return material;
+          }
+          return null;
         })
         .collect(Collectors.toList());
     materialService.saveAll(materials);

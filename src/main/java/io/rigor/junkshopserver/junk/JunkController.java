@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/junk")
@@ -48,9 +49,11 @@ public class JunkController {
     }
     Junk junk = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Junk>() {});
     String materialName = junk.getMaterial();
-    Material material = materialService.findByName(materialName);
-    String weight = junk.getWeight();
-    materialService.addWeight(material, weight);
+    Optional<Material> byName = materialService.findByName(materialName);
+    if (byName.isPresent()) {
+      String weight = junk.getWeight();
+      materialService.addWeight(byName.get(), weight);
+    }
     return new ResponseEntity<>(junkService.save(junk), HttpStatus.CREATED);
   }
 
