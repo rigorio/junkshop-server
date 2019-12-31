@@ -117,8 +117,10 @@ public class DynamoCashSwindler implements CashService {
     if (byDate.isPresent()) {
       Cash c = byDate.get();
       c.setCapital(capital);
+      c.setCashOnHand("" +(getCashOnHand(c)));
       return cashRepository.save(c);
     } else {
+      cash.setCashOnHand("" + getCashOnHand(cash));
       return cashRepository.save(cash);
     }
   }
