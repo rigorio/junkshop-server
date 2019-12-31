@@ -8,8 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @DynamoDBTable(tableName = "cash")
 public class Cash {
@@ -28,4 +29,13 @@ public class Cash {
   private String cashOnHand;
   @DynamoDBAttribute
   private String date;
+
+  public Cash() {
+    capital = "0.0";
+    sales = "0.0";
+    purchases = "0.0";
+    expenses = "0.0";
+    cashOnHand = "0.0";
+    date = LocalDate.now().toString();
+  }
 }
