@@ -3,6 +3,7 @@ package io.rigor.junkshopserver.sale;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.rigor.junkshopserver.cash.CashService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,12 @@ import java.util.List;
 public class SaleController {
 
   private SaleService<Sale> saleService;
+  private CashService cashService;
 
-  public SaleController(SaleService<Sale> saleService) {
+  public SaleController(SaleService<Sale> saleService,
+                        CashService cashService) {
     this.saleService = saleService;
+    this.cashService = cashService;
   }
 
   @GetMapping()
@@ -38,11 +42,15 @@ public class SaleController {
     if (body instanceof List) {
       ObjectMapper mapper = new ObjectMapper();
       String s = mapper.writeValueAsString(body);
-      List<Sale> junks = mapper.readValue(s, new TypeReference<List<Sale>>() {});
-      return new ResponseEntity<>(saleService.saveAll(junks), HttpStatus.CREATED);
+      List<Sale> sales = mapper.readValue(s, new TypeReference<List<Sale>>() {});
+      List<Sale> newSales = saleService.saveAll(sales);
+      newSales.forEach(cashService::addSales);
+      return new ResponseEntity<>(newSales, HttpStatus.CREATED);
     }
-    Sale junk = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Sale>() {});
-    return new ResponseEntity<>(saleService.save(junk), HttpStatus.CREATED);
+    Sale sale = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Sale>() {});
+    Sale newSale = saleService.save(sale);
+    cashService.addSales(newSale);
+    return new ResponseEntity<>(newSale, HttpStatus.CREATED);
   }
 
   @DeleteMapping("/{id}")

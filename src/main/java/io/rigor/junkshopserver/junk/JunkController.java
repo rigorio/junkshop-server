@@ -3,6 +3,7 @@ package io.rigor.junkshopserver.junk;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.rigor.junkshopserver.cash.CashService;
 import io.rigor.junkshopserver.material.Material;
 import io.rigor.junkshopserver.material.MaterialService;
 import org.springframework.http.HttpStatus;
@@ -18,11 +19,14 @@ public class JunkController {
 
   private JunkService junkService;
   private MaterialService materialService;
+  private CashService cashService;
 
   public JunkController(JunkService junkService,
-                        MaterialService materialService) {
+                        MaterialService materialService,
+                        CashService cashService) {
     this.junkService = junkService;
     this.materialService = materialService;
+    this.cashService = cashService;
   }
 
   @GetMapping()
@@ -45,7 +49,9 @@ public class JunkController {
       ObjectMapper mapper = new ObjectMapper();
       String s = mapper.writeValueAsString(body);
       List<Junk> junks = mapper.readValue(s, new TypeReference<List<Junk>>() {});
-      return new ResponseEntity<>(junkService.saveAll(junks), HttpStatus.CREATED);
+      List<Junk> savedJunks = junkService.saveAll(junks);
+      savedJunks.forEach(cashService::addPurchases);
+      return new ResponseEntity<>(savedJunks, HttpStatus.CREATED);
     }
     Junk junk = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Junk>() {});
     String materialName = junk.getMaterial();
@@ -54,7 +60,9 @@ public class JunkController {
       String weight = junk.getWeight();
       materialService.addWeight(byName.get(), weight);
     }
-    return new ResponseEntity<>(junkService.save(junk), HttpStatus.CREATED);
+    Junk savedJunk = junkService.save(junk);
+    cashService.addPurchases(savedJunk);
+    return new ResponseEntity<>(savedJunk, HttpStatus.CREATED);
   }
 
   @GetMapping("calibrate")
