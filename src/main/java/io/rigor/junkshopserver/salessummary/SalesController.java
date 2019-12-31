@@ -1,4 +1,4 @@
-package io.rigor.junkshopserver.sales;
+package io.rigor.junkshopserver.salessummary;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sales")
+@RequestMapping("/api/salessummary")
 public class SalesController {
   private SalesService salesService;
 
@@ -20,7 +20,7 @@ public class SalesController {
 
   @GetMapping("/month")
   public ResponseEntity<?> getByMonth(@RequestParam(required = false) String year) {
-    List<SalesEntity> salesEntities = salesService.viewByMonth();
+    List<SaleSummary> salesEntities = salesService.viewByMonth();
     return new ResponseEntity<>(salesEntities, HttpStatus.OK);
   }
 }

@@ -1,9 +1,9 @@
-package io.rigor.junkshopserver.purchase;
+package io.rigor.junkshopserver.sale;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PurchaseService<T> {
+public interface SaleService<T> {
   List<T> findAll();
 
   Optional<T> findById(String id);

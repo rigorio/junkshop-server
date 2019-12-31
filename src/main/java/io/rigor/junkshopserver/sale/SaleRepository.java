@@ -1,4 +1,4 @@
-package io.rigor.junkshopserver.purchase;
+package io.rigor.junkshopserver.sale;
 
 import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
 import org.springframework.data.repository.CrudRepository;
@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 @EnableScan
-public interface PurchaseRepository  extends CrudRepository<Purchase, String> {
-  List<Purchase> findAllByDate(String date);
+public interface SaleRepository extends CrudRepository<Sale, String> {
+  List<Sale> findAllByDate(String date);
 }

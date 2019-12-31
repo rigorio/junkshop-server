@@ -1,4 +1,4 @@
-package io.rigor.junkshopserver.sales;
+package io.rigor.junkshopserver.salessummary;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SalesEntity {
+public class SaleSummary {
   private String span;
   private String sales;
 }
