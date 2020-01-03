@@ -63,8 +63,12 @@ public class ExpenseController {
 
   @DeleteMapping
   public ResponseEntity<?> delete(@RequestBody Expense expense) {
-    expenseService.delete(expense);
-    cashService.deleteExpense(expense);
+    Optional<Expense> byId = expenseService.findById(expense.getId());
+    if (byId.isPresent()) {
+      expense = byId.get();
+      expenseService.delete(expense);
+      cashService.deleteExpense(expense);
+    }
     return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
   }
 }
