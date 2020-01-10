@@ -23,7 +23,7 @@ public class DynamoJunkHandler implements JunkService {
         .generateCreateTableRequest(Junk.class);
 
     tableRequest.setProvisionedThroughput(
-        new ProvisionedThroughput(4L, 4L));
+        new ProvisionedThroughput(1L, 1L));
 
     TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
     this.junkRepository = junkRepository;

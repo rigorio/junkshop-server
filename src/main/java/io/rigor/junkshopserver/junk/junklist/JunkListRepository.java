@@ -9,4 +9,5 @@ import java.util.List;
 public interface JunkListRepository extends CrudRepository<JunkList, String> {
   List<JunkList> findAll();
   List<JunkList> findAllByDate(String date);
+  List<JunkList> findAllByClientId(String clientId);
 }

@@ -23,7 +23,7 @@ public class DynamoMaterialHandler implements MaterialService {
         .generateCreateTableRequest(Material.class);
 
     tableRequest.setProvisionedThroughput(
-        new ProvisionedThroughput(4L, 4L));
+        new ProvisionedThroughput(1L, 1L));
 
     TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
     this.repository = repository;

@@ -17,4 +17,6 @@ public interface SaleService<T> {
   List<T> saveAll(List<T> t);
 
   T save(T t);
+
+  List<T> findByClientId(String clientId);
 }

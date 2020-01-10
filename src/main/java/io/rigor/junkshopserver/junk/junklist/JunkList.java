@@ -27,5 +27,6 @@ public class JunkList {
   private String totalPrice;
   @DynamoDBAttribute
   private String date;
+  private String clientId;
 
 }

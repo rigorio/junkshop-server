@@ -86,6 +86,11 @@ public class DynamoJunkListHandler implements JunkListService {
     return junkListRepository.save(junkList);
   }
 
+  @Override
+  public List<JunkList> findByClientId(String clientId) {
+    return junkListRepository.findAllByClientId(clientId);
+  }
+
   private <T> List<T> collectAsList(Iterable<T> all) {
     return StreamSupport
         .stream(all.spliterator(), false)

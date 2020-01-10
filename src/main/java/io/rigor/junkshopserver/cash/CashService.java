@@ -9,6 +9,8 @@ import java.util.List;
 public interface CashService {
   List<Cash> allDailyCash();
 
+  Cash getToday();
+
   void addSales(Sale sale);
 
   void addPurchases(Junk junk);

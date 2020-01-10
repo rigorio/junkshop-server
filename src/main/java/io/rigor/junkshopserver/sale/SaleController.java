@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.rigor.junkshopserver.cash.CashService;
+import io.rigor.junkshopserver.junk.junklist.JunkList;
+import io.rigor.junkshopserver.junk.junklist.JunkListService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +26,12 @@ public class SaleController {
   }
 
   @GetMapping()
-  public ResponseEntity<?> getAllNoFilter(@RequestParam(required = false) String date) {
+  public ResponseEntity<?> getAllNoFilter(@RequestParam(required = false) String date,
+                                          @RequestParam(required = false) String clientId) {
     if (date != null)
       return new ResponseEntity<>(saleService.findByDate(date), HttpStatus.OK);
+    if (clientId!= null)
+      return new ResponseEntity<>(saleService.findByClientId(clientId), HttpStatus.OK);
     return new ResponseEntity<>(saleService.findAll(), HttpStatus.OK);
   }
 

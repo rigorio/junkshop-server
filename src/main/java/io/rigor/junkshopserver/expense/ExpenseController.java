@@ -16,11 +16,13 @@ import java.util.Optional;
 public class ExpenseController {
   public ExpenseService expenseService;
   private CashService cashService;
+  private ObjectMapper mapper;
 
   public ExpenseController(ExpenseService expenseService,
                            CashService cashService) {
     this.expenseService = expenseService;
     this.cashService = cashService;
+    mapper = new ObjectMapper();
   }
 
 
@@ -46,7 +48,8 @@ public class ExpenseController {
       List<Expense> expenses = mapper.readValue(s, new TypeReference<List<Expense>>() {});
       return new ResponseEntity<>(expenseService.saveAll(expenses), HttpStatus.CREATED);
     }
-    Expense expense = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Expense>() {});
+
+    Expense expense = mapper.readValue(mapper.writeValueAsString(body), new TypeReference<Expense>() {});
     cashService.addExpense(expense);
     return new ResponseEntity<>(expenseService.save(expense), HttpStatus.CREATED);
   }
@@ -62,7 +65,13 @@ public class ExpenseController {
   }
 
   @DeleteMapping
-  public ResponseEntity<?> delete(@RequestBody Expense expense) {
+  public ResponseEntity<?> delete(@RequestBody Object body) throws JsonProcessingException {
+    if (body instanceof List) {
+      List<Expense> expenses = mapper.readValue(mapper.writeValueAsString(body), new TypeReference<List<Expense>>() {});
+      expenseService.deleteAll(expenses);
+      return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+    }
+    Expense expense = mapper.readValue(mapper.writeValueAsString(body), new TypeReference<Expense>() {});
     Optional<Expense> byId = expenseService.findById(expense.getId());
     if (byId.isPresent()) {
       expense = byId.get();

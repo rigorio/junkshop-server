@@ -13,4 +13,6 @@ public interface JunkListService {
   List<JunkList> saveAll(List<JunkList> list);
 
   JunkList save(JunkList junkList);
+
+  List<JunkList> findByClientId(String clientId);
 }

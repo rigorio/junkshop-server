@@ -9,6 +9,9 @@ import io.rigor.junkshopserver.expense.Expense;
 import io.rigor.junkshopserver.expense.ExpenseService;
 import io.rigor.junkshopserver.junk.Junk;
 import io.rigor.junkshopserver.junk.JunkService;
+import io.rigor.junkshopserver.junk.junklist.JunkList;
+import io.rigor.junkshopserver.junk.junklist.JunkListRepository;
+import io.rigor.junkshopserver.junk.junklist.JunkListService;
 import io.rigor.junkshopserver.sale.Sale;
 import io.rigor.junkshopserver.sale.SaleService;
 import org.springframework.stereotype.Service;
@@ -25,14 +28,19 @@ public class DynamoCashSwindler implements CashService {
   private SaleService<Sale> saleService;
   private ExpenseService expenseService;
 
+  private JunkListRepository repository;
+
   public DynamoCashSwindler(CashRepository cashRepository,
                             AmazonDynamoDB amazonDynamoDB,
                             JunkService junkService,
-                            SaleService<Sale> saleService, ExpenseService expenseService) {
+                            SaleService<Sale> saleService,
+                            ExpenseService expenseService,
+                            JunkListRepository repository) {
     this.cashRepository = cashRepository;
     this.junkService = junkService;
     this.saleService = saleService;
     this.expenseService = expenseService;
+    this.repository = repository;
     DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDB);
     CreateTableRequest tableRequest = mapper.generateCreateTableRequest(Cash.class);
     tableRequest.setProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
@@ -42,6 +50,14 @@ public class DynamoCashSwindler implements CashService {
   @Override
   public List<Cash> allDailyCash() {
     return cashRepository.findAll();
+  }
+
+  @Override
+  public Cash getToday() {
+    List<Cash> cashList = allDailyCash();
+    Optional<Cash> any = cashList.stream().filter(c -> c.getDate().equals(LocalDate.now().toString())).findAny();
+    Cash cash = any.orElseGet(Cash::new);
+    return updateCapital(cash);
   }
 
   @Override
@@ -91,8 +107,8 @@ public class DynamoCashSwindler implements CashService {
         .map(date -> {
           Optional<Cash> junkByDate = cashRepository.findByDate(date);
 
-          List<Junk> junk = junkService.findByDate(date);
-          double purchasesSum = junk.stream().mapToDouble(j -> Double.valueOf(j.getTotalPrice())).sum();
+          List<JunkList> byDate = repository.findAllByDate(date);
+          double totalSum = byDate.stream().mapToDouble(j -> Double.valueOf(j.getTotalPrice())).sum();
 
           List<Sale> sales = saleService.findByDate(date);
           double salesSum = sales.stream().mapToDouble(s -> Double.valueOf(s.getTotalPrice())).sum();
@@ -103,7 +119,7 @@ public class DynamoCashSwindler implements CashService {
 
           Cash cash = junkByDate.orElseGet(Cash::new);
           cash.setSales("" + salesSum);
-          cash.setPurchases("" + purchasesSum);
+          cash.setPurchases("" + totalSum);
           cash.setExpenses("" + expenseSum);
           cash.setCashOnHand("" + getCashOnHand(cash));
           return cash;

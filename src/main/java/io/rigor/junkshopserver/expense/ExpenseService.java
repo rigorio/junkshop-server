@@ -19,4 +19,6 @@ public interface ExpenseService {
   void deleteAll();
 
   void deleteById(String id);
+
+  void deleteAll(List<Expense> expenses);
 }

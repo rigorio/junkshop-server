@@ -24,11 +24,20 @@ public class CashController {
 
   @GetMapping("/today")
   public ResponseEntity<?> today() {
+    Cash savedCash = getToday();
+    return new ResponseEntity<>(savedCash, HttpStatus.OK);
+  }
+
+  @GetMapping("/calibrate")
+  public void calibrate() {
+    cashService.allDailyCash().forEach(cash -> cashService.updateCapital(cash));
+  }
+
+  private Cash getToday() {
     List<Cash> cashList = cashService.allDailyCash();
     Optional<Cash> any = cashList.stream().filter(c -> c.getDate().equals(LocalDate.now().toString())).findAny();
     Cash cash = any.orElseGet(Cash::new);
-    Cash savedCash = cashService.updateCapital(cash);
-    return new ResponseEntity<>(savedCash, HttpStatus.OK);
+    return cashService.updateCapital(cash);
   }
 
   @PostMapping

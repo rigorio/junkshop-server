@@ -34,7 +34,7 @@ public class DynamoSaleHandler implements SaleService<Sale> {
         .generateCreateTableRequest(Sale.class);
 
     tableRequest.setProvisionedThroughput(
-        new ProvisionedThroughput(4L, 4L));
+        new ProvisionedThroughput(1L, 1L));
 
     TableUtils.createTableIfNotExists(amazonDynamoDB, tableRequest);
     tableRequest = null;
@@ -97,6 +97,11 @@ public class DynamoSaleHandler implements SaleService<Sale> {
         .collect(Collectors.toList());
     materialService.saveAll(materials);
     return saleRepository.save(sale);
+  }
+
+  @Override
+  public List<Sale> findByClientId(String clientId) {
+    return saleRepository.findAllByClientId(clientId);
   }
 
   private <T> List<T> collectAsList(Iterable<T> all) {

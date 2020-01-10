@@ -66,6 +66,11 @@ public class DynamoExpenseHandler implements ExpenseService {
     expenseRepository.deleteById(id);
   }
 
+  @Override
+  public void deleteAll(List<Expense> expenses) {
+  expenseRepository.deleteAll(expenses);
+  }
+
   private List<Expense> collectAsList(Iterable<Expense> all) {
     return StreamSupport
         .stream(all.spliterator(), false)
