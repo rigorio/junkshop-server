@@ -24,19 +24,21 @@ public class JunkListController {
 
   @GetMapping
   public ResponseEntity<?> getAll(@RequestParam(required = false) String date,
-                                  @RequestParam(required = false) String clientId) {
+                                  @RequestParam(required = false) String clientId,
+                                  @RequestParam String accountId) {
     if (date != null)
-      return new ResponseEntity<>(junkListService.findByDate(date), HttpStatus.OK);
+      return new ResponseEntity<>(junkListService.findByDate(date, accountId), HttpStatus.OK);
     if (clientId != null)
-      return new ResponseEntity<>(junkListService.findByClientId(clientId), HttpStatus.OK);
-    return new ResponseEntity<>(junkListService.all(), HttpStatus.OK);
+      return new ResponseEntity<>(junkListService.findByClientId(clientId, accountId), HttpStatus.OK);
+    return new ResponseEntity<>(junkListService.all(accountId), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> get(@PathVariable(required = false) String id) {
+  public ResponseEntity<?> get(@PathVariable(required = false) String id,
+                               @RequestParam String accountId) {
     if (id != null)
       return new ResponseEntity<>(junkListService.findById(id), HttpStatus.OK);
-    return new ResponseEntity<>(junkListService.all(), HttpStatus.OK);
+    return new ResponseEntity<>(junkListService.all(accountId), HttpStatus.OK);
   }
 
   @PostMapping

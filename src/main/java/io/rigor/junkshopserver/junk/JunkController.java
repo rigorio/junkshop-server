@@ -30,17 +30,19 @@ public class JunkController {
   }
 
   @GetMapping()
-  public ResponseEntity<?> getAllNoFilter(@RequestParam(required = false) String date) {
+  public ResponseEntity<?> getAllNoFilter(@RequestParam(required = false) String date,
+                                          @RequestParam String accountId) {
     if (date != null)
-      return new ResponseEntity<>(junkService.findByDate(date), HttpStatus.OK);
-    return new ResponseEntity<>(junkService.findAll(), HttpStatus.OK);
+      return new ResponseEntity<>(junkService.findByDate(date, accountId), HttpStatus.OK);
+    return new ResponseEntity<>(junkService.findAll(accountId), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getAll(@PathVariable(required = false) String id) {
+  public ResponseEntity<?> getAll(@PathVariable(required = false) String id,
+                                  @RequestParam String accountId) {
     if (id != null)
       return new ResponseEntity<>(junkService.findById(id), HttpStatus.OK);
-    return new ResponseEntity<>(junkService.findAll(), HttpStatus.OK);
+    return new ResponseEntity<>(junkService.findAll(accountId), HttpStatus.OK);
   }
 
   @PostMapping
@@ -68,8 +70,8 @@ public class JunkController {
   }
 
   @GetMapping("calibrate")
-  public ResponseEntity<?> calibrate() {
-    List<Junk> junks = junkService.findAll();
+  public ResponseEntity<?> calibrate(@RequestParam String accountId) {
+    List<Junk> junks = junkService.findAll(accountId);
     List<Material> materials = materialService.findAll();
     materials.forEach(material -> {
       double totalWeight = junks.stream()
@@ -82,9 +84,10 @@ public class JunkController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> delete(@PathVariable String id) {
+  public ResponseEntity<?> delete(@PathVariable String id,
+                                  @RequestParam String accountId) {
     junkService.deleteById(id);
-    return new ResponseEntity<>(junkService.findAll(), HttpStatus.OK);
+    return new ResponseEntity<>(junkService.findAll(accountId), HttpStatus.OK);
   }
 
 

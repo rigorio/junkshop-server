@@ -30,8 +30,8 @@ public class DynamoJunkHandler implements JunkService {
   }
 
   @Override
-  public List<Junk> findAll() {
-    return collectAsList(junkRepository.findAll());
+  public List<Junk> findAll(String accountId) {
+    return junkRepository.findAllByAccountId(accountId);
   }
 
 
@@ -41,8 +41,8 @@ public class DynamoJunkHandler implements JunkService {
   }
 
   @Override
-  public List<Junk> findByDate(String date) {
-    return junkRepository.findAllByDate(date);
+  public List<Junk> findByDate(String date, String accountId) {
+    return junkRepository.findAllByDateAndAccountId(date, accountId);
   }
 
   @Override

@@ -4,15 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface JunkListService {
-  List<JunkList> all();
+  List<JunkList> all(String accountId);
 
   Optional<JunkList> findById(String id);
 
-  List<JunkList> findByDate(String date);
+  List<JunkList> findByDate(String date, String accountId);
 
   List<JunkList> saveAll(List<JunkList> list);
 
   JunkList save(JunkList junkList, String accountId);
 
-  List<JunkList> findByClientId(String clientId);
+  List<JunkList> findByClientId(String clientId, String accountId);
 }

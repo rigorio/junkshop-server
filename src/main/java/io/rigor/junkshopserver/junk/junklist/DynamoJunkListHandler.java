@@ -42,8 +42,8 @@ public class DynamoJunkListHandler implements JunkListService {
   }
 
   @Override
-  public List<JunkList> all() {
-    return junkListRepository.findAll();
+  public List<JunkList> all(String accountId) {
+    return junkListRepository.findAllByAccountId(accountId);
   }
 
   @Override
@@ -52,8 +52,8 @@ public class DynamoJunkListHandler implements JunkListService {
   }
 
   @Override
-  public List<JunkList> findByDate(String date) {
-    return junkListRepository.findAllByDate(date);
+  public List<JunkList> findByDate(String date, String accountId) {
+    return junkListRepository.findAllByDateAndAccountId(date, accountId);
   }
 
   @Override
@@ -88,8 +88,8 @@ public class DynamoJunkListHandler implements JunkListService {
   }
 
   @Override
-  public List<JunkList> findByClientId(String clientId) {
-    return junkListRepository.findAllByClientId(clientId);
+  public List<JunkList> findByClientId(String clientId, String accountId) {
+    return junkListRepository.findAllByClientIdAndAccountId(clientId, accountId);
   }
 
   private <T> List<T> collectAsList(Iterable<T> all) {
