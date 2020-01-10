@@ -29,6 +29,8 @@ public class Cash {
   private String cashOnHand;
   @DynamoDBAttribute
   private String date;
+  @DynamoDBAttribute
+  private String accountId;
 
   public Cash() {
     capital = "0.0";
@@ -37,5 +39,15 @@ public class Cash {
     expenses = "0.0";
     cashOnHand = "0.0";
     date = LocalDate.now().toString();
+  }
+
+  public Cash(String accountId) {
+    capital = "0.0";
+    sales = "0.0";
+    purchases = "0.0";
+    expenses = "0.0";
+    cashOnHand = "0.0";
+    date = LocalDate.now().toString();
+    this.accountId = accountId;
   }
 }

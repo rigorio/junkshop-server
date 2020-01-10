@@ -62,7 +62,7 @@ public class DynamoJunkListHandler implements JunkListService {
   }
 
   @Override
-  public JunkList save(JunkList junkList) {
+  public JunkList save(JunkList junkList, String accountId) {
     List<Junk> purchaseItems = junkList.getPurchaseItems();
     junkService.saveAll(purchaseItems);
     purchaseItems.forEach(junk -> {
@@ -81,7 +81,8 @@ public class DynamoJunkListHandler implements JunkListService {
         materialService.save(newMaterial);
       }
       Junk savedJunk = junkService.save(junk);
-      cashService.addPurchases(savedJunk);
+      cashService.calibrateAll(accountId);
+//      cashService.addPurchases(savedJunk);
     });
     return junkListRepository.save(junkList);
   }

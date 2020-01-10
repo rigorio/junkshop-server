@@ -7,17 +7,11 @@ import io.rigor.junkshopserver.sale.Sale;
 import java.util.List;
 
 public interface CashService {
-  List<Cash> allDailyCash();
+  List<Cash> allDailyCash(String accountId);
 
-  Cash getToday();
+  Cash getToday(String accountId);
 
-  void addSales(Sale sale);
+  void calibrateAll(String accountId);
 
-  void addPurchases(Junk junk);
-
-  void addExpense(Expense expense);
-
-  void deleteExpense(Expense expense);
-
-  Cash updateCapital(Cash cash);
+  Cash updateCapital(Cash cash, String accountId);
 }

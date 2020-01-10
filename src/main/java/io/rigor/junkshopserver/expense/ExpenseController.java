@@ -41,7 +41,8 @@ public class ExpenseController {
   }
 
   @PostMapping
-  public ResponseEntity<?> save(@RequestBody Object body) throws JsonProcessingException {
+  public ResponseEntity<?> save(@RequestBody Object body,
+                                @RequestParam String accountId) throws JsonProcessingException {
     if (body instanceof List) {
       ObjectMapper mapper = new ObjectMapper();
       String s = mapper.writeValueAsString(body);
@@ -50,22 +51,24 @@ public class ExpenseController {
     }
 
     Expense expense = mapper.readValue(mapper.writeValueAsString(body), new TypeReference<Expense>() {});
-    cashService.addExpense(expense);
+//    cashService.addExpense(expense);
+    cashService.calibrateAll(accountId);
     return new ResponseEntity<>(expenseService.save(expense), HttpStatus.CREATED);
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteById(@PathVariable String id) {
+  public ResponseEntity<?> deleteById(@PathVariable String id, @RequestParam String accountId) {
     Optional<Expense> byId = expenseService.findById(id);
     if (byId.isPresent()) {
-      cashService.deleteExpense(byId.get());
+//      cashService.deleteExpense(byId.get());
+      cashService.calibrateAll(accountId);
       expenseService.deleteById(id);
     }
     return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
   }
 
   @DeleteMapping
-  public ResponseEntity<?> delete(@RequestBody Object body) throws JsonProcessingException {
+  public ResponseEntity<?> delete(@RequestBody Object body, @RequestParam String accountId) throws JsonProcessingException {
     if (body instanceof List) {
       List<Expense> expenses = mapper.readValue(mapper.writeValueAsString(body), new TypeReference<List<Expense>>() {});
       expenseService.deleteAll(expenses);
@@ -76,7 +79,8 @@ public class ExpenseController {
     if (byId.isPresent()) {
       expense = byId.get();
       expenseService.delete(expense);
-      cashService.deleteExpense(expense);
+//      cashService.deleteExpense(expense);
+      cashService.calibrateAll(accountId);
     }
     return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
   }

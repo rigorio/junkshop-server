@@ -18,30 +18,33 @@ public class CashController {
   }
 
   @GetMapping
-  public ResponseEntity<?> getAll() {
-    return new ResponseEntity<>(cashService.allDailyCash(), HttpStatus.OK);
+  public ResponseEntity<?> getAll(@RequestParam String accountId) {
+    return new ResponseEntity<>(cashService.allDailyCash(accountId), HttpStatus.OK);
   }
 
   @GetMapping("/today")
-  public ResponseEntity<?> today() {
-    Cash savedCash = getToday();
+  public ResponseEntity<?> today(@RequestParam String accountId) {
+    Cash savedCash = getToday(accountId);
     return new ResponseEntity<>(savedCash, HttpStatus.OK);
   }
 
   @GetMapping("/calibrate")
-  public void calibrate() {
-    cashService.allDailyCash().forEach(cash -> cashService.updateCapital(cash));
+  public void calibrate(@RequestParam String accountId) {
+    cashService.allDailyCash(accountId).forEach(cash -> cashService.updateCapital(cash, accountId));
   }
 
-  private Cash getToday() {
-    List<Cash> cashList = cashService.allDailyCash();
-    Optional<Cash> any = cashList.stream().filter(c -> c.getDate().equals(LocalDate.now().toString())).findAny();
-    Cash cash = any.orElseGet(Cash::new);
-    return cashService.updateCapital(cash);
+  private Cash getToday(String accountId) {
+    List<Cash> cashList = cashService.allDailyCash(accountId);
+    Optional<Cash> any = cashList
+        .stream()
+        .filter(c -> c.getDate().equals(LocalDate.now().toString()))
+        .findAny();
+    Cash cash = any.orElseGet(() -> new Cash(accountId));
+    return cashService.updateCapital(cash, accountId);
   }
 
   @PostMapping
-  public ResponseEntity<?> save(@RequestBody Cash cash) {
-    return new ResponseEntity<>(cashService.updateCapital(cash), HttpStatus.OK);
+  public ResponseEntity<?> save(@RequestBody Cash cash, @RequestParam String accountId) {
+    return new ResponseEntity<>(cashService.updateCapital(cash, accountId), HttpStatus.OK);
   }
 }

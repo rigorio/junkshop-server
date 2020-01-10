@@ -12,7 +12,7 @@ public interface JunkListService {
 
   List<JunkList> saveAll(List<JunkList> list);
 
-  JunkList save(JunkList junkList);
+  JunkList save(JunkList junkList, String accountId);
 
   List<JunkList> findByClientId(String clientId);
 }

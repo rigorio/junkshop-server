@@ -40,10 +40,11 @@ public class JunkListController {
   }
 
   @PostMapping
-  public ResponseEntity<?> save(@RequestBody JunkList junkList) {
+  public ResponseEntity<?> save(@RequestBody JunkList junkList,
+                                String accountId) {
     if (junkList.getDate() == null)
       junkList.setDate(LocalDate.now().toString());
-    JunkList purchase = junkListService.save(junkList);
+    JunkList purchase = junkListService.save(junkList, accountId);
     String clientId = purchase.getClientId();
     Optional<Client> byId = clientService.findById(clientId);
     if (byId.isPresent()) {
@@ -61,7 +62,7 @@ public class JunkListController {
           purchase.setTotalPrice("" + (0 - remainingLoan));
           client.setCashAdvance("0.0");
         }
-        junkListService.save(purchase);
+        junkListService.save(purchase, accountId);
         clientService.save(client);
       }
     }

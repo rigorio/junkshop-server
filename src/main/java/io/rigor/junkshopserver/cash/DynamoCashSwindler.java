@@ -7,11 +7,9 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import io.rigor.junkshopserver.expense.Expense;
 import io.rigor.junkshopserver.expense.ExpenseService;
-import io.rigor.junkshopserver.junk.Junk;
 import io.rigor.junkshopserver.junk.JunkService;
 import io.rigor.junkshopserver.junk.junklist.JunkList;
 import io.rigor.junkshopserver.junk.junklist.JunkListRepository;
-import io.rigor.junkshopserver.junk.junklist.JunkListService;
 import io.rigor.junkshopserver.sale.Sale;
 import io.rigor.junkshopserver.sale.SaleService;
 import org.springframework.stereotype.Service;
@@ -48,60 +46,21 @@ public class DynamoCashSwindler implements CashService {
   }
 
   @Override
-  public List<Cash> allDailyCash() {
-    return cashRepository.findAll();
+  public List<Cash> allDailyCash(String accountId) {
+    return cashRepository.findAllByAccountId(accountId);
   }
 
   @Override
-  public Cash getToday() {
-    List<Cash> cashList = allDailyCash();
+  public Cash getToday(String accountId) {
+    List<Cash> cashList = allDailyCash(accountId);
     Optional<Cash> any = cashList.stream().filter(c -> c.getDate().equals(LocalDate.now().toString())).findAny();
     Cash cash = any.orElseGet(Cash::new);
-    return updateCapital(cash);
+    return updateCapital(cash, accountId);
   }
 
   @Override
-  public void addSales(Sale sale) {
- /*   String totalPrice = sale.getTotalPrice();
-    String date = sale.getDate();
-    Optional<Cash> byDate = cashRepository.findByDate(date);
-    if (byDate.isPresent()) {
-      Cash cash = byDate.get();
-      cash.setSales("" + (toDouble(cash.getSales()) + toDouble(totalPrice)));
-      Double cashOnHand = getCashOnHand(cash);
-      cash.setCashOnHand("" + cashOnHand);
-      cashRepository.save(cash);
-    } else {
-      Cash cash = createCashItem(date);
-      cash.setSales(totalPrice);
-      cash.setCashOnHand("" + getCashOnHand(cash));
-      cashRepository.save(cash);
-    }*/
-    calibrateAll();
-  }
-
-  @Override
-  public void addPurchases(Junk junk) {
-/*    String totalPrice = junk.getTotalPrice();
-    String date = junk.getDate();
-    Optional<Cash> byDate = cashRepository.findByDate(date);
-    if (byDate.isPresent()) {
-      Cash cash = byDate.get();
-      cash.setPurchases("" + (toDouble(cash.getPurchases()) + toDouble(totalPrice)));
-      Double cashOnHand = getCashOnHand(cash);
-      cash.setCashOnHand("" + cashOnHand);
-      cashRepository.save(cash);
-    } else {
-      Cash cash = createCashItem(date);
-      cash.setPurchases(totalPrice);
-      cash.setCashOnHand("" + getCashOnHand(cash));
-      cashRepository.save(cash);
-    }*/
-    calibrateAll();
-  }
-
-  public void calibrateAll() {
-    List<Cash> cashList = allDailyCash();
+  public void calibrateAll(String accountId) {
+    List<Cash> cashList = allDailyCash(accountId);
     List<String> dates = cashList.stream().map(Cash::getDate).collect(Collectors.toList());
     List<Cash> updatedKaching = dates.stream()
         .map(date -> {
@@ -128,49 +87,8 @@ public class DynamoCashSwindler implements CashService {
     cashRepository.saveAll(updatedKaching);
   }
 
-  /**
-   * TODO ok great you also delete expenses so how about that this is very tiresome
-   */
   @Override
-  public void addExpense(Expense expense) {
-  /*  String amount = expense.getAmount();
-    String date = expense.getDate();
-    Optional<Cash> byDate = cashRepository.findByDate(date);
-    if (byDate.isPresent()) {
-      Cash cash = byDate.get();
-      cash.setExpenses("" + (toDouble(cash.getExpenses()) + toDouble(amount)));
-      cash.setCashOnHand("" + getCashOnHand(cash));
-      cashRepository.save(cash);
-    } else {
-      Cash cash = createCashItem(date);
-      cash.setExpenses(amount);
-      cash.setCashOnHand("" + getCashOnHand(cash));
-      cashRepository.save(cash);
-    }*/
-    calibrateAll();
-  }
-
-  @Override
-  public void deleteExpense(Expense expense) {
-  /*  String amount = expense.getAmount();
-    String date = expense.getDate();
-    Optional<Cash> byDate = cashRepository.findByDate(date);
-    if (byDate.isPresent()) {
-      Cash cash = byDate.get();
-      cash.setExpenses("" + (toDouble(cash.getExpenses()) - toDouble(amount)));
-      cash.setCashOnHand("" + getCashOnHand(cash));
-      cashRepository.save(cash);
-    } else {
-      Cash cash = createCashItem(date);
-      cash.setExpenses(amount);
-      cash.setCashOnHand("" + getCashOnHand(cash));
-      cashRepository.save(cash);
-    }*/
-    calibrateAll();
-  }
-
-  @Override
-  public Cash updateCapital(Cash cash) {
+  public Cash updateCapital(Cash cash, String accountId) {
     String capital = cash.getCapital();
     String date = cash.getDate();
     Optional<Cash> byDate = cashRepository.findByDate(date);
@@ -179,12 +97,12 @@ public class DynamoCashSwindler implements CashService {
       c.setCapital(capital);
       c.setCashOnHand("" + (getCashOnHand(c)));
       Cash save = cashRepository.save(c);
-      calibrateAll();
+      calibrateAll(accountId);
       return save;
     } else {
       cash.setCashOnHand("" + getCashOnHand(cash));
       Cash save = cashRepository.save(cash);
-      calibrateAll();
+      calibrateAll(accountId);
       return save;
     }
   }

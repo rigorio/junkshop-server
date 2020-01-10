@@ -56,7 +56,8 @@ public class ClientController {
 
   @GetMapping("/loan")
   public ResponseEntity<?> loan(@RequestParam String clientId,
-                                @RequestParam String amount) {
+                                @RequestParam String amount,
+                                @RequestParam String accountId) {
     Optional<Client> byId = clientService.findById(clientId);
     if (byId.isPresent()) {
       Client client = byId.get();
@@ -64,12 +65,12 @@ public class ClientController {
         amount = "" + (Double.valueOf(amount) + Double.valueOf(client.getCashAdvance()));
       client.setCashAdvance(amount);
       clientService.save(client);
-      Cash cashToday = cashService.getToday();
+      Cash cashToday = cashService.getToday(accountId);
       Double capital = Double.valueOf(cashToday.getCapital());
       Double loanAmount = Double.valueOf(amount);
       double capitalLeft = capital - loanAmount;
       cashToday.setCapital("" + capitalLeft);
-      cashService.updateCapital(cashToday);
+      cashService.updateCapital(cashToday, accountId);
       return new ResponseEntity<>(client, HttpStatus.OK);
     }
     return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -77,19 +78,20 @@ public class ClientController {
 
   @GetMapping("/pay")
   public ResponseEntity<?> payLoan(@RequestParam String clientId,
-                                   @RequestParam String amount) {
+                                   @RequestParam String amount,
+                                   @RequestParam String accountId) {
     Optional<Client> byId = clientService.findById(clientId);
     if (byId.isPresent()) {
       Client client = byId.get();
       Double cashAdvance = Double.valueOf(client.getCashAdvance());
       client.setCashAdvance("" + (cashAdvance - Double.valueOf(amount)));
       clientService.save(client);
-      Cash cashToday = cashService.getToday();
+      Cash cashToday = cashService.getToday(accountId);
       Double capital = Double.valueOf(cashToday.getCapital());
       Double loanAmount = Double.valueOf(amount);
       double capitalLeft = capital + loanAmount;
       cashToday.setCapital("" + capitalLeft);
-      cashService.updateCapital(cashToday);
+      cashService.updateCapital(cashToday, accountId);
       return new ResponseEntity<>(client, HttpStatus.OK);
     }
     return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

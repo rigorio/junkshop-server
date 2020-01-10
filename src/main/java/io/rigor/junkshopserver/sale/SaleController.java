@@ -30,7 +30,7 @@ public class SaleController {
                                           @RequestParam(required = false) String clientId) {
     if (date != null)
       return new ResponseEntity<>(saleService.findByDate(date), HttpStatus.OK);
-    if (clientId!= null)
+    if (clientId != null)
       return new ResponseEntity<>(saleService.findByClientId(clientId), HttpStatus.OK);
     return new ResponseEntity<>(saleService.findAll(), HttpStatus.OK);
   }
@@ -43,18 +43,22 @@ public class SaleController {
   }
 
   @PostMapping
-  public ResponseEntity<?> save(@RequestBody Object body) throws JsonProcessingException {
+  public ResponseEntity<?> save(@RequestBody Object body,
+                                @RequestParam String accountId)
+      throws JsonProcessingException {
     if (body instanceof List) {
       ObjectMapper mapper = new ObjectMapper();
       String s = mapper.writeValueAsString(body);
       List<Sale> sales = mapper.readValue(s, new TypeReference<List<Sale>>() {});
       List<Sale> newSales = saleService.saveAll(sales);
-      newSales.forEach(cashService::addSales);
+//      newSales.forEach(cashService::addSales);
+      cashService.calibrateAll(accountId);
       return new ResponseEntity<>(newSales, HttpStatus.CREATED);
     }
     Sale sale = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Sale>() {});
     Sale newSale = saleService.save(sale);
-    cashService.addSales(newSale);
+    cashService.calibrateAll(accountId);
+//    cashService.addSales(newSale);
     return new ResponseEntity<>(newSale, HttpStatus.CREATED);
   }
 

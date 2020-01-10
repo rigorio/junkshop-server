@@ -44,13 +44,14 @@ public class JunkController {
   }
 
   @PostMapping
-  public ResponseEntity<?> save(@RequestBody Object body) throws JsonProcessingException {
+  public ResponseEntity<?> save(@RequestBody Object body, @RequestParam String accountId) throws JsonProcessingException {
     if (body instanceof List) {
       ObjectMapper mapper = new ObjectMapper();
       String s = mapper.writeValueAsString(body);
       List<Junk> junks = mapper.readValue(s, new TypeReference<List<Junk>>() {});
       List<Junk> savedJunks = junkService.saveAll(junks);
-      savedJunks.forEach(cashService::addPurchases);
+//      savedJunks.forEach(cashService::addPurchases);
+      cashService.calibrateAll(accountId);
       return new ResponseEntity<>(savedJunks, HttpStatus.CREATED);
     }
     Junk junk = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Junk>() {});
@@ -61,7 +62,8 @@ public class JunkController {
       materialService.addWeight(byName.get(), weight);
     }
     Junk savedJunk = junkService.save(junk);
-    cashService.addPurchases(savedJunk);
+//    cashService.addPurchases(savedJunk);
+    cashService.calibrateAll(accountId);
     return new ResponseEntity<>(savedJunk, HttpStatus.CREATED);
   }
 
