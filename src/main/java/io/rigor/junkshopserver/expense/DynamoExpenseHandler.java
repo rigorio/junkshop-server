@@ -32,12 +32,12 @@ public class DynamoExpenseHandler implements ExpenseService {
   }
 
   @Override
-  public Optional<Expense> findById(String id, String accountId) {
-    return expenseRepository.findByIdAndAccountId(id, accountId);
+  public Optional<Expense> findById(String id) {
+    return expenseRepository.findById(id);
   }
 
   @Override
-  public List<Expense> findByDateAndId(String date, String accountId) {
+  public List<Expense> findByDateAndAccountId(String date, String accountId) {
     return expenseRepository.findByDateAndAccountId(date, accountId);
   }
 

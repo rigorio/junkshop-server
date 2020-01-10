@@ -6,9 +6,9 @@ import java.util.Optional;
 public interface ExpenseService {
   List<Expense> all(String accountId);
 
-  Optional<Expense> findById(String id, String accountId);
+  Optional<Expense> findById(String id);
 
-  List<Expense> findByDateAndId(String date, String accountId);
+  List<Expense> findByDateAndAccountId(String date, String accountId);
 
   Expense save(Expense expense);
 

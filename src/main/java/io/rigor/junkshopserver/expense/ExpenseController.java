@@ -30,7 +30,7 @@ public class ExpenseController {
   public ResponseEntity<?> getAllNoFilter(@RequestParam(required = false) String date,
                                           @RequestParam String accountId) {
     if (date != null)
-      return new ResponseEntity<>(expenseService.findByDateAndId(date, accountId), HttpStatus.OK);
+      return new ResponseEntity<>(expenseService.findByDateAndAccountId(date, accountId), HttpStatus.OK);
     return new ResponseEntity<>(expenseService.all(accountId), HttpStatus.OK);
   }
 
@@ -38,7 +38,7 @@ public class ExpenseController {
   public ResponseEntity<?> getAll(@PathVariable(required = false) String id,
                                   @RequestParam String accountId) {
     if (id != null)
-      return new ResponseEntity<>(expenseService.findById(id, accountId), HttpStatus.OK);
+      return new ResponseEntity<>(expenseService.findById(id), HttpStatus.OK);
     return new ResponseEntity<>(expenseService.all(accountId), HttpStatus.OK);
   }
 
@@ -61,7 +61,7 @@ public class ExpenseController {
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteById(@PathVariable String id,
                                       @RequestParam String accountId) {
-    Optional<Expense> byId = expenseService.findById(id, accountId);
+    Optional<Expense> byId = expenseService.findById(id);
     if (byId.isPresent()) {
 //      cashService.deleteExpense(byId.get());
       cashService.calibrateAll(accountId);
@@ -79,7 +79,7 @@ public class ExpenseController {
       return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
     }
     Expense expense = mapper.readValue(mapper.writeValueAsString(body), new TypeReference<Expense>() {});
-    Optional<Expense> byId = expenseService.findById(expense.getId(), accountId);
+    Optional<Expense> byId = expenseService.findById(expense.getId());
     if (byId.isPresent()) {
       expense = byId.get();
       expenseService.delete(expense);

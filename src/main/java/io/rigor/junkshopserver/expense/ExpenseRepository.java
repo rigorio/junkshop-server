@@ -12,6 +12,5 @@ public interface ExpenseRepository extends CrudRepository<Expense, String> {
   List<Expense> findAllByAccountId(String accountId);
 //  List<Expense> saveAll(List<Expense> expenses);
   List<Expense> findByDate(String date);
-  Optional<Expense> findByIdAndAccountId(String id, String accountId);
   List<Expense> findByDateAndAccountId(String date, String accountId);
 }
