@@ -27,17 +27,19 @@ public class ExpenseController {
 
 
   @GetMapping()
-  public ResponseEntity<?> getAllNoFilter(@RequestParam(required = false) String date) {
+  public ResponseEntity<?> getAllNoFilter(@RequestParam(required = false) String date,
+                                          @RequestParam String accountId) {
     if (date != null)
-      return new ResponseEntity<>(expenseService.findByDate(date), HttpStatus.OK);
-    return new ResponseEntity<>(expenseService.all(), HttpStatus.OK);
+      return new ResponseEntity<>(expenseService.findByDateAndId(date, accountId), HttpStatus.OK);
+    return new ResponseEntity<>(expenseService.all(accountId), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getAll(@PathVariable(required = false) String id) {
+  public ResponseEntity<?> getAll(@PathVariable(required = false) String id,
+                                  @RequestParam String accountId) {
     if (id != null)
-      return new ResponseEntity<>(expenseService.findById(id), HttpStatus.OK);
-    return new ResponseEntity<>(expenseService.all(), HttpStatus.OK);
+      return new ResponseEntity<>(expenseService.findById(id, accountId), HttpStatus.OK);
+    return new ResponseEntity<>(expenseService.all(accountId), HttpStatus.OK);
   }
 
   @PostMapping
@@ -57,8 +59,9 @@ public class ExpenseController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteById(@PathVariable String id, @RequestParam String accountId) {
-    Optional<Expense> byId = expenseService.findById(id);
+  public ResponseEntity<?> deleteById(@PathVariable String id,
+                                      @RequestParam String accountId) {
+    Optional<Expense> byId = expenseService.findById(id, accountId);
     if (byId.isPresent()) {
 //      cashService.deleteExpense(byId.get());
       cashService.calibrateAll(accountId);
@@ -68,14 +71,15 @@ public class ExpenseController {
   }
 
   @DeleteMapping
-  public ResponseEntity<?> delete(@RequestBody Object body, @RequestParam String accountId) throws JsonProcessingException {
+  public ResponseEntity<?> delete(@RequestBody Object body,
+                                  @RequestParam String accountId) throws JsonProcessingException {
     if (body instanceof List) {
       List<Expense> expenses = mapper.readValue(mapper.writeValueAsString(body), new TypeReference<List<Expense>>() {});
       expenseService.deleteAll(expenses);
       return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
     }
     Expense expense = mapper.readValue(mapper.writeValueAsString(body), new TypeReference<Expense>() {});
-    Optional<Expense> byId = expenseService.findById(expense.getId());
+    Optional<Expense> byId = expenseService.findById(expense.getId(), accountId);
     if (byId.isPresent()) {
       expense = byId.get();
       expenseService.delete(expense);

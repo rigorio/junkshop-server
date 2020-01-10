@@ -24,4 +24,6 @@ public class Expense {
   private String note;
   @DynamoDBAttribute
   private String date;
+  @DynamoDBAttribute
+  private String accountId;
 }

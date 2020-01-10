@@ -27,18 +27,18 @@ public class DynamoExpenseHandler implements ExpenseService {
   }
 
   @Override
-  public List<Expense> all() {
-    return expenseRepository.findAll();
+  public List<Expense> all(String accountId) {
+    return expenseRepository.findAllByAccountId(accountId);
   }
 
   @Override
-  public Optional<Expense> findById(String id) {
-    return expenseRepository.findById(id);
+  public Optional<Expense> findById(String id, String accountId) {
+    return expenseRepository.findByIdAndAccountId(id, accountId);
   }
 
   @Override
-  public List<Expense> findByDate(String date) {
-    return expenseRepository.findByDate(date);
+  public List<Expense> findByDateAndId(String date, String accountId) {
+    return expenseRepository.findByDateAndAccountId(date, accountId);
   }
 
   @Override
@@ -68,7 +68,7 @@ public class DynamoExpenseHandler implements ExpenseService {
 
   @Override
   public void deleteAll(List<Expense> expenses) {
-  expenseRepository.deleteAll(expenses);
+    expenseRepository.deleteAll(expenses);
   }
 
   private List<Expense> collectAsList(Iterable<Expense> all) {

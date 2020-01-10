@@ -30,9 +30,9 @@ public class MaterialController {
   }
 
   @GetMapping("/page")
-  public ResponseEntity<?> getClientAndMaterials() {
+  public ResponseEntity<?> getClientAndMaterials(@RequestParam String accountId) {
     Map<String, Object> map = new HashMap<>();
-    map.put("clients", clientService.all());
+    map.put("clients", clientService.all(accountId));
     map.put("materials", materialService.findAll());
     return new ResponseEntity<>(map, HttpStatus.OK);
   }

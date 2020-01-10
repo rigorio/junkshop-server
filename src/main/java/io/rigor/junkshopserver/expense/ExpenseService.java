@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ExpenseService {
-  List<Expense> all();
+  List<Expense> all(String accountId);
 
-  Optional<Expense> findById(String id);
+  Optional<Expense> findById(String id, String accountId);
 
-  List<Expense> findByDate(String date);
+  List<Expense> findByDateAndId(String date, String accountId);
 
   Expense save(Expense expense);
 

@@ -72,7 +72,7 @@ public class DynamoCashSwindler implements CashService {
           List<Sale> sales = saleService.findByDate(date);
           double salesSum = sales.stream().mapToDouble(s -> Double.valueOf(s.getTotalPrice())).sum();
 
-          List<Expense> expenses = expenseService.findByDate(date);
+          List<Expense> expenses = expenseService.findByDateAndId(date, accountId);
           double expenseSum = expenses.stream().mapToDouble(e -> Double.valueOf(e.getAmount())).sum();
 
 
