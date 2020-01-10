@@ -25,4 +25,6 @@ public class Material {
   private String standardPrice;
   @DynamoDBAttribute
   private String weight;
+  @DynamoDBAttribute
+  private String accountId;
 }

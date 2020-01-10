@@ -68,7 +68,7 @@ public class DynamoJunkListHandler implements JunkListService {
     purchaseItems.forEach(junk -> {
       junk.setDate(LocalDate.now().toString());
       String materialName = junk.getMaterial();
-      Optional<Material> byName = materialService.findByName(materialName);
+      Optional<Material> byName = materialService.findByName(materialName, accountId);
       if (byName.isPresent()) {
         String weight = junk.getWeight();
         materialService.addWeight(byName.get(), weight);

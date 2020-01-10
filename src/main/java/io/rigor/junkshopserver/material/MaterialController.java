@@ -25,15 +25,15 @@ public class MaterialController {
   }
 
   @GetMapping
-  public ResponseEntity<?> getAll() {
-    return new ResponseEntity<>(materialService.findAll(), HttpStatus.OK);
+  public ResponseEntity<?> getAll(@RequestParam String accountId) {
+    return new ResponseEntity<>(materialService.findAll(accountId), HttpStatus.OK);
   }
 
   @GetMapping("/page")
   public ResponseEntity<?> getClientAndMaterials(@RequestParam String accountId) {
     Map<String, Object> map = new HashMap<>();
     map.put("clients", clientService.all(accountId));
-    map.put("materials", materialService.findAll());
+    map.put("materials", materialService.findAll(accountId));
     return new ResponseEntity<>(map, HttpStatus.OK);
   }
 

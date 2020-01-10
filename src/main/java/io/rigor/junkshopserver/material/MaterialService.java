@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MaterialService {
-  List<Material> findAll();
+  List<Material> findAll(String accountId);
 
   Optional<Material> findById(String id);
 
@@ -18,5 +18,5 @@ public interface MaterialService {
 
   Material addWeight(Material m, String weight);
 
-  Optional<Material> findByName(String materialName);
+  Optional<Material> findByName(String materialName, String accountId);
 }

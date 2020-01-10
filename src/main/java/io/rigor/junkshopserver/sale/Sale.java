@@ -27,5 +27,8 @@ public class Sale {
   private String totalPrice;
   @DynamoDBAttribute
   private String date;
+  @DynamoDBAttribute
   private String clientId;
+  @DynamoDBAttribute
+  private String accountId;
 }

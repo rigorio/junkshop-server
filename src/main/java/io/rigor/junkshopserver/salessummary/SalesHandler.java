@@ -19,7 +19,7 @@ public class SalesHandler implements SalesService {
 
   @Override
   public List<SaleSummary> viewByMonth() {
-    List<Sale> purchases = saleService.findAll();
+    List<Sale> purchases = saleService.findAll(accountId);
     List<SaleSummary> sales = new ArrayList<>();
     for (Sale purchase : purchases) {
       LocalDate date = LocalDate.parse(purchase.getDate());

@@ -42,9 +42,10 @@ public class ClientController {
   }
 
   @GetMapping("/sp/{id}")
-  public ResponseEntity<?> getSalesAndPurchases(@PathVariable String id) {
+  public ResponseEntity<?> getSalesAndPurchases(@PathVariable String id,
+                                                @RequestParam String accountId) {
     List<Sale> sales = saleService.findByClientId(id);
-    List<JunkList> purchases = junkListService.findByClientId(id);
+    List<JunkList> purchases = junkListService.findByClientId(id, accountId);
     Client client = clientService.findById(id).get();
     ClientResponse response = ClientResponse.builder()
         .sales(sales)

@@ -30,8 +30,9 @@ public class DynamoMaterialHandler implements MaterialService {
   }
 
   @Override
-  public List<Material> findAll() {
-    return collectAsList(repository.findAll());
+  public List<Material> findAll(String accountId) {
+    return repository.findAllByAccountId(accountId);
+//    return collectAsList(repository.findAll());
   }
 
   @Override
@@ -71,8 +72,9 @@ public class DynamoMaterialHandler implements MaterialService {
   }
 
   @Override
-  public Optional<Material> findByName(String materialName) {
-    return repository.findAllByMaterial(materialName);
+  public Optional<Material> findByName(String materialName, String accountId) {
+    return repository.findByMaterialAndAccountId(materialName, accountId);
+//    return repository.findAllByMaterial(materialName);
 //    return allByMaterial.orElse(new Material());
   }
 

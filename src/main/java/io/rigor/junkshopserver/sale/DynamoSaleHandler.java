@@ -46,8 +46,9 @@ public class DynamoSaleHandler implements SaleService<Sale> {
   }
 
   @Override
-  public List<Sale> findAll() {
-    return collectAsList(saleRepository.findAll());
+  public List<Sale> findAll(String accountId) {
+    return saleRepository.findAllByAccountId(accountId);
+//    return collectAsList(saleRepository.findAll());
   }
 
   @Override
@@ -56,8 +57,9 @@ public class DynamoSaleHandler implements SaleService<Sale> {
   }
 
   @Override
-  public List<Sale> findByDate(String date) {
-    return saleRepository.findAllByDate(date);
+  public List<Sale> findByDate(String date, String accountId) {
+    return saleRepository.findAllByDateAndAccountId(date, accountId);
+//    return saleRepository.findAllByDate(date);
   }
 
   @Override
@@ -84,7 +86,7 @@ public class DynamoSaleHandler implements SaleService<Sale> {
         .map(saleItem -> {
           String materialName = saleItem.getMaterial();
           String weight = saleItem.getWeight();
-          Optional<Material> byName = materialService.findByName(materialName);
+          Optional<Material> byName = materialService.findByName(materialName, sale.getAccountId());
           if (byName.isPresent()) {
             Material material = byName.get();
             Double currentWeight = Double.valueOf(material.getWeight());

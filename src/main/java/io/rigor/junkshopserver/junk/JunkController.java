@@ -58,7 +58,7 @@ public class JunkController {
     }
     Junk junk = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Junk>() {});
     String materialName = junk.getMaterial();
-    Optional<Material> byName = materialService.findByName(materialName);
+    Optional<Material> byName = materialService.findByName(materialName, accountId);
     if (byName.isPresent()) {
       String weight = junk.getWeight();
       materialService.addWeight(byName.get(), weight);
@@ -72,7 +72,7 @@ public class JunkController {
   @GetMapping("calibrate")
   public ResponseEntity<?> calibrate(@RequestParam String accountId) {
     List<Junk> junks = junkService.findAll(accountId);
-    List<Material> materials = materialService.findAll();
+    List<Material> materials = materialService.findAll(accountId);
     materials.forEach(material -> {
       double totalWeight = junks.stream()
           .filter(junk -> junk.getMaterial().equals(material.getMaterial()))

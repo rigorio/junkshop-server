@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SaleService<T> {
-  List<T> findAll();
+  List<T> findAll(String accountId);
 
   Optional<T> findById(String id);
 
-  List<T> findByDate(String date);
+  List<T> findByDate(String date, String accountId);
 
   void deleteById(String id);
 
