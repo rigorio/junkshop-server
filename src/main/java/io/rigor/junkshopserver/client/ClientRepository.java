@@ -9,4 +9,8 @@ import java.util.List;
 public interface ClientRepository extends CrudRepository<Client, String> {
   List<Client> findAll();
 
+  List<Client> findAllByAccountId(String accountId);
+
+
+
 }

@@ -32,8 +32,8 @@ public class ClientController {
   }
 
   @GetMapping
-  public ResponseEntity<?> all() {
-    return new ResponseEntity<>(clientService.all(), HttpStatus.OK);
+  public ResponseEntity<?> all(@RequestParam String accountId) {
+    return new ResponseEntity<>(clientService.all(accountId), HttpStatus.OK);
   }
 
   @GetMapping("/{id}")

@@ -26,4 +26,5 @@ public class Client {
   private String address;
   @DynamoDBAttribute
   private String cashAdvance;
+  private String accountId;
 }

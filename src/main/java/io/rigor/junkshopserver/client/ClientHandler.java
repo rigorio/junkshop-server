@@ -24,8 +24,8 @@ public class ClientHandler implements ClientService {
   }
 
   @Override
-  public List<Client> all() {
-    return clientRepository.findAll();
+  public List<Client> all(String accountId) {
+    return clientRepository.findAllByAccountId(accountId);
   }
 
   @Override
