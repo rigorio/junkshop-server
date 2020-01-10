@@ -20,6 +20,8 @@ public class CustomProperty {
   private String property;
   @DynamoDBAttribute
   private String value;
+  @DynamoDBAttribute
+  private String accountId;
 
   public CustomProperty(String property, String value) {
     this.property = property;

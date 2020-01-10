@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomPropertyService {
-  List<CustomProperty> findAll();
+  List<CustomProperty> findAll(String accountId);
 
-  Optional<CustomProperty> findByProperty(String property);
+  Optional<CustomProperty> findByPropertyAndAccountID(String property, String accountId);
 
   Optional<CustomProperty> findById(String id);
 

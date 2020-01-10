@@ -26,13 +26,13 @@ public class DynamoCustomPropertyHandler implements CustomPropertyService {
   }
 
   @Override
-  public List<CustomProperty> findAll() {
-    return collectAsList(customPropertyRepository.findAll());
+  public List<CustomProperty> findAll(String accountId) {
+    return customPropertyRepository.findAllByAccountId(accountId);
   }
 
   @Override
-  public Optional<CustomProperty> findByProperty(String property) {
-    return customPropertyRepository.findByProperty(property);
+  public Optional<CustomProperty> findByPropertyAndAccountID(String property, String accountId) {
+    return customPropertyRepository.findByPropertyAndAccountId(property, accountId);
   }
 
   @Override

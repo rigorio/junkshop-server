@@ -9,5 +9,6 @@ import java.util.Optional;
 @EnableScan
 public interface CustomPropertyRepository extends CrudRepository<CustomProperty, String> {
   List<CustomProperty> findAll();
-  Optional<CustomProperty> findByProperty(String property);
+  List<CustomProperty> findAllByAccountId(String accountId);
+  Optional<CustomProperty> findByPropertyAndAccountId(String property, String accountId);
 }

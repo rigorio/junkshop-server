@@ -16,19 +16,23 @@ public class CustomPropertyController {
   }
 
   @GetMapping
-  public ResponseEntity<?> getAll() {
-    return new ResponseEntity<>(customPropertyService.findAll(), HttpStatus.OK);
+  public ResponseEntity<?> getAll(@RequestParam String accountId) {
+    return new ResponseEntity<>(customPropertyService.findAll(accountId), HttpStatus.OK);
   }
 
   @GetMapping("/{property}")
-  public ResponseEntity<?> getValue(@PathVariable String property) {
-    Optional<CustomProperty> byProperty = customPropertyService.findByProperty(property);
+  public ResponseEntity<?> getValue(@PathVariable String property,
+                                    @RequestParam String accountId) {
+    Optional<CustomProperty> byProperty = customPropertyService
+        .findByPropertyAndAccountID(property, accountId);
     return new ResponseEntity<>(byProperty.orElse(new CustomProperty()), HttpStatus.OK);
   }
 
   @PostMapping
-  public ResponseEntity<?> save(@RequestBody CustomProperty customProperty) {
-    Optional<CustomProperty> byProperty = customPropertyService.findByProperty(customProperty.getProperty());
+  public ResponseEntity<?> save(@RequestBody CustomProperty customProperty,
+                                @RequestParam String accountId) {
+    Optional<CustomProperty> byProperty = customPropertyService
+        .findByPropertyAndAccountID(customProperty.getProperty(), accountId);
     if (byProperty.isPresent()){
       customProperty = byProperty.get();
     }
