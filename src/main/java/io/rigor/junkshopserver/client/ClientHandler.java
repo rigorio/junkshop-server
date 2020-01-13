@@ -37,4 +37,9 @@ public class ClientHandler implements ClientService {
   public Optional<Client> findById(String id) {
     return clientRepository.findById(id);
   }
+
+  @Override
+  public void delete(Client client) {
+    clientRepository.delete(client);
+  }
 }

@@ -107,5 +107,10 @@ public class ClientController {
     return new ResponseEntity<>(clientService.save(client), HttpStatus.CREATED);
   }
 
+  @DeleteMapping
+  public ResponseEntity<?> delete(@RequestBody Client client) {
+    clientService.delete(client);
+    return new ResponseEntity<>(null, HttpStatus.OK);
+  }
 
 }

@@ -9,4 +9,6 @@ public interface ClientService {
   Client save(Client client);
 
   Optional<Client> findById(String id);
+
+  void delete(Client client);
 }
