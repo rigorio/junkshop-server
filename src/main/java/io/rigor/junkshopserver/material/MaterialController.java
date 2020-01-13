@@ -46,7 +46,14 @@ public class MaterialController {
       return new ResponseEntity<>(materialService.saveAll(materials), HttpStatus.CREATED);
     }
     Material junk = mapper.readValue(mapper.writeValueAsString(body), new TypeReference<Material>() {});
-    return new ResponseEntity<>(materialService.save(junk), HttpStatus.CREATED);
+    Material save = materialService.save(junk);
+    return new ResponseEntity<>(materialService.findAll(save.getAccountId()), HttpStatus.CREATED);
+  }
+
+  @DeleteMapping
+  public ResponseEntity<?> delete(@RequestBody Material material) {
+    materialService.delete(material);
+    return new ResponseEntity<>(materialService.findAll(material.getAccountId()), HttpStatus.OK);
   }
 
   @PostMapping("/weight")

@@ -13,4 +13,6 @@ public interface MaterialRepository extends CrudRepository<Material, String> {
   List<Material> findAllByAccountId(String accountId);
 
   Optional<Material> findByMaterialAndAccountId(String material, String accountId);
+
+  List<Material> findAll();
 }
