@@ -19,8 +19,9 @@ public class SalesController {
   }
 
   @GetMapping("/month")
-  public ResponseEntity<?> getByMonth(@RequestParam(required = false) String year) {
-    List<SaleSummary> salesEntities = salesService.viewByMonth();
+  public ResponseEntity<?> getByMonth(@RequestParam(required = false) String year,
+                                      @RequestParam String accountId) {
+    List<SaleSummary> salesEntities = salesService.viewByMonth(accountId);
     return new ResponseEntity<>(salesEntities, HttpStatus.OK);
   }
 }

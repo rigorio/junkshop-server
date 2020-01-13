@@ -16,4 +16,6 @@ public interface SaleRepository extends CrudRepository<Sale, String> {
   List<Sale> findAllByClientId(String clientId);
 
   List<Sale> findAllByClientIdAndAccountId(String clientId, String accountId);
+
+  List<Sale> findAll();
 }

@@ -18,7 +18,7 @@ public class SalesHandler implements SalesService {
   }
 
   @Override
-  public List<SaleSummary> viewByMonth() {
+  public List<SaleSummary> viewByMonth(String accountId) {
     List<Sale> purchases = saleService.findAll(accountId);
     List<SaleSummary> sales = new ArrayList<>();
     for (Sale purchase : purchases) {
