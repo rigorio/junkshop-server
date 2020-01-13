@@ -43,7 +43,7 @@ public class JunkListController {
 
   @PostMapping
   public ResponseEntity<?> save(@RequestBody JunkList junkList,
-                                String accountId) {
+                                @RequestParam String accountId) {
     if (junkList.getDate() == null)
       junkList.setDate(LocalDate.now().toString());
     JunkList purchase = junkListService.save(junkList, accountId);

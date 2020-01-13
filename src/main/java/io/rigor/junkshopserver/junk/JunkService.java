@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface JunkService {
-  List<Junk> findAll(String accountId);
+  List<Junk> findAll();
 
   Optional<Junk> findById(String id);
 
-  List<Junk> findByDate(String date, String accountId);
+  List<Junk> findByDate(String date);
 
   void deleteById(String id);
 
