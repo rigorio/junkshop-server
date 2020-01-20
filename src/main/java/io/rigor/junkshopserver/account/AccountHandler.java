@@ -24,8 +24,10 @@ public class AccountHandler implements AccountService {
   }
 
   @Override
-  public void save(Account account) {
-    accountRepository.save(account);
+  public Account save(Account account) {
+    Account save = accountRepository.save(account);
+    save.setPassword("");
+    return save;
   }
 
   @Override

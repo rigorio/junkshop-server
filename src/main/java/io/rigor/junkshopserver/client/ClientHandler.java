@@ -25,7 +25,19 @@ public class ClientHandler implements ClientService {
 
   @Override
   public List<Client> all(String accountId) {
-    return clientRepository.findAllByAccountId(accountId);
+    List<Client> allByAccountId = clientRepository.findAllByAccountId(accountId);
+    if (allByAccountId.isEmpty()) {
+      Client client = Client.builder()
+          .name("walk in")
+          .address("")
+          .contact("")
+          .cashAdvance("")
+          .accountId(accountId)
+          .build();
+      Client save = clientRepository.save(client);
+      allByAccountId.add(save);
+    }
+    return allByAccountId;
   }
 
   @Override

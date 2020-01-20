@@ -52,6 +52,10 @@ public class DynamoMaterialHandler implements MaterialService {
 
   @Override
   public List<Material> saveAll(List<Material> materials) {
+    for (Material material : materials) {
+      if (material.getWeight() == null)
+        material.setWeight("0.0");
+    }
     return collectAsList(repository.saveAll(materials));
   }
 

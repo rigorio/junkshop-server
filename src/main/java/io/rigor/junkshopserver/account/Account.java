@@ -20,4 +20,6 @@ public class Account {
   private String username;
   @DynamoDBAttribute
   private String password;
+  @DynamoDBAttribute
+  private String role;
 }

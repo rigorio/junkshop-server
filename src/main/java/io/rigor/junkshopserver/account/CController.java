@@ -53,34 +53,51 @@ public class CController {
 
   @GetMapping
   public void kwan(@RequestParam String secretKey) {
-    String id = accountService.check("admin", "pass123").get().getId();
-    List<Cash> allCash = cashRepository.findAll();
-    allCash.forEach(cash -> cash.setAccountId(id));
-    cashRepository.saveAll(allCash);
-
-    List<Client> clients = clientRepository.findAll();
-    clients.forEach(o -> o.setAccountId(id));
-    clientRepository.saveAll(clients);
-
-    List<CustomProperty> customProperties = customPropertyRepository.findAll();
-    customProperties.forEach(o -> o.setAccountId(id));
-    customPropertyRepository.saveAll(customProperties);
-
-    List<Expense> all = expenseRepository.findAll();
-    all.forEach(o -> o.setAccountId(id));
-    expenseRepository.saveAll(all);
-
-    List<JunkList> all1 = junkListRepository.findAll();
-    all1.forEach(o -> o.setAccountId(id));
-    junkListRepository.saveAll(all1);
-
-    List<Material> all2 = materialRepository.findAll();
-    all2.forEach(o -> o.setAccountId(id));
-    materialRepository.saveAll(all2);
-
-    List<Sale> all3 = saleRepository.findAll();
-    all3.forEach(o -> o.setAccountId(id));
-    saleRepository.saveAll(all3);
+//    String id = accountService.check("junkshop1", "js1123").get().getId();
+//    List<Cash> allCash = cashRepository.findAll();
+//    allCash.forEach(cash -> cash.setAccountId(id));
+//    cashRepository.saveAll(allCash);
+//
+//    List<Client> clients = clientRepository.findAll();
+//    clients.forEach(o -> o.setAccountId(id));
+//    clientRepository.saveAll(clients);
+//
+//    List<CustomProperty> customProperties = customPropertyRepository.findAll();
+//    customProperties.forEach(o -> o.setAccountId(id));
+//    customPropertyRepository.saveAll(customProperties);
+//
+//    List<Expense> all = expenseRepository.findAll();
+//    all.forEach(o -> o.setAccountId(id));
+//    expenseRepository.saveAll(all);
+//
+//    List<JunkList> all1 = junkListRepository.findAll();
+//    all1.forEach(o -> o.setAccountId(id));
+//    junkListRepository.saveAll(all1);
+//
+//    List<Material> all2 = materialRepository.findAll();
+//    all2.forEach(o -> o.setAccountId(id));
+//    materialRepository.saveAll(all2);
+//
+//    String id2 = accountService.check("junkshop2", "js1223").get().getId();
+//    String id3 = accountService.check("junkshop3", "js1233").get().getId();
+//    all2.forEach(o->{
+//      o.setId(null);
+//      o.setAccountId(id2);
+//      o.setWeight("0.0");
+//    });
+//    materialRepository.saveAll(all2);
+//
+//    all2.forEach(o->{
+//      o.setId(null);
+//      o.setAccountId(id3);
+//      o.setWeight("0.0");
+//    });
+//    materialRepository.saveAll(all2);
+//
+//
+//    List<Sale> all3 = saleRepository.findAll();
+//    all3.forEach(o -> o.setAccountId(id));
+//    saleRepository.saveAll(all3);
 
   }
 }
