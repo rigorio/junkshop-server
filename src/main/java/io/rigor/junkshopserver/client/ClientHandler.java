@@ -31,7 +31,7 @@ public class ClientHandler implements ClientService {
           .name("walk in")
           .address("")
           .contact("")
-          .cashAdvance("")
+          .cashAdvance("0.0")
           .accountId(accountId)
           .build();
       Client save = clientRepository.save(client);

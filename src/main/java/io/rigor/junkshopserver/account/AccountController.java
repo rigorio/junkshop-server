@@ -41,6 +41,7 @@ public class AccountController {
 
   @PostMapping("/create")
   public ResponseEntity<?> create(@RequestBody Account account) {
+    System.out.println("iyak?");
     return new ResponseEntity<>(accountService.save(account), HttpStatus.OK);
   }
 }

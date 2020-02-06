@@ -7,6 +7,7 @@ import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,6 +54,8 @@ public class DynamoMaterialHandler implements MaterialService {
   @Override
   public List<Material> saveAll(List<Material> materials) {
     for (Material material : materials) {
+      if (material == null)
+        return new ArrayList<>();
       if (material.getWeight() == null)
         material.setWeight("0.0");
     }

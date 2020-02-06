@@ -11,4 +11,5 @@ public interface CashRepository extends CrudRepository<Cash, String> {
   List<Cash> findAll();
   Optional<Cash> findByDate(String date);
   List<Cash> findAllByAccountId(String accountId);
+  Optional<Cash> findByDateAndAccountId(String date, String accountId);
 }

@@ -51,7 +51,8 @@ public class JunkController {
       List<Junk> junks = mapper.readValue(s, new TypeReference<List<Junk>>() {});
       List<Junk> savedJunks = junkService.saveAll(junks);
 //      savedJunks.forEach(cashService::addPurchases);
-      cashService.calibrateAll(accountId);
+//      cashService.calibrateAll(accountId);
+      savedJunks.forEach(junk -> cashService.calibrate(junk.getDate(), accountId));
       return new ResponseEntity<>(savedJunks, HttpStatus.CREATED);
     }
     Junk junk = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Junk>() {});
@@ -63,7 +64,8 @@ public class JunkController {
     }
     Junk savedJunk = junkService.save(junk);
 //    cashService.addPurchases(savedJunk);
-    cashService.calibrateAll(accountId);
+//    cashService.calibrateAll(accountId);
+    cashService.calibrate(savedJunk.getDate(), accountId);
     return new ResponseEntity<>(savedJunk, HttpStatus.CREATED);
   }
 

@@ -52,12 +52,14 @@ public class SaleController {
       List<Sale> sales = mapper.readValue(s, new TypeReference<List<Sale>>() {});
       List<Sale> newSales = saleService.saveAll(sales);
 //      newSales.forEach(cashService::addSales);
-      cashService.calibrateAll(accountId);
+//      cashService.calibrateAll(accountId);
+      newSales.forEach(sale -> cashService.calibrate(sale.getDate(), accountId));
       return new ResponseEntity<>(newSales, HttpStatus.CREATED);
     }
     Sale sale = new ObjectMapper().readValue(new ObjectMapper().writeValueAsString(body), new TypeReference<Sale>() {});
     Sale newSale = saleService.save(sale);
-    cashService.calibrateAll(accountId);
+//    cashService.calibrateAll(accountId);
+    cashService.calibrate(newSale.getDate(), accountId);
 //    cashService.addSales(newSale);
     return new ResponseEntity<>(newSale, HttpStatus.CREATED);
   }

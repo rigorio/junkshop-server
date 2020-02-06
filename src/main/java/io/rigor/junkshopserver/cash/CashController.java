@@ -24,8 +24,10 @@ public class CashController {
 
   @GetMapping("/today")
   public ResponseEntity<?> today(@RequestParam String accountId) {
-    Cash savedCash = getToday(accountId);
-    return new ResponseEntity<>(savedCash, HttpStatus.OK);
+//    Cash savedCash = getToday(accountId);
+    Optional<Cash> byDateAcc = cashService.findByDateAcc(LocalDate.now().toString(), accountId);
+    return byDateAcc.<ResponseEntity<?>>map(cash -> new ResponseEntity<>(cash, HttpStatus.OK))
+        .orElseGet(() -> new ResponseEntity<>(cashService.what(new Cash()), HttpStatus.OK));
   }
 
   @GetMapping("/calibrate")
@@ -34,12 +36,14 @@ public class CashController {
   }
 
   private Cash getToday(String accountId) {
+
     List<Cash> cashList = cashService.allDailyCash(accountId);
     Optional<Cash> any = cashList
         .stream()
         .filter(c -> c.getDate().equals(LocalDate.now().toString()))
         .findAny();
-    Cash cash = any.orElseGet(() -> new Cash(accountId));
+    Cash cash = any.orElseGet(() -> new Cash(accountId)); // todo what
+
     return cashService.updateCapital(cash, accountId);
   }
 

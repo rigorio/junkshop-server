@@ -97,7 +97,8 @@ public class DynamoSaleHandler implements SaleService<Sale> {
           return null;
         })
         .collect(Collectors.toList());
-    materialService.saveAll(materials);
+    if (! materials.isEmpty())
+      materialService.saveAll(materials);
     return saleRepository.save(sale);
   }
 
