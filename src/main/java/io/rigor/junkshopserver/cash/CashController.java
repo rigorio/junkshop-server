@@ -32,7 +32,7 @@ public class CashController {
 
   @GetMapping("/calibrate")
   public void calibrate(@RequestParam String accountId) {
-    cashService.allDailyCash(accountId).forEach(cash -> cashService.updateCapital(cash, accountId));
+    cashService.calibrateAll(accountId);
   }
 
   private Cash getToday(String accountId) {
