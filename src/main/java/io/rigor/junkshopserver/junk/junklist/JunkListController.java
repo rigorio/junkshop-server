@@ -38,13 +38,11 @@ public class JunkListController {
     List<JunkList> all = new ArrayList<>();
     if (date != null) {
       all = junkListService.findByDate(date, accountId);
-    }
-    if (clientId != null) {
+      return new ResponseEntity<>(all, HttpStatus.OK);
+    } else if (clientId != null) {
       all = junkListService.findByClientId(clientId, accountId);
-    }
-    if (accountId != null)
+    } else if (accountId != null)
       all = junkListService.all(accountId);
-    System.out.println(new ObjectMapper().writeValueAsString(all));
     return new ResponseEntity<>(all, HttpStatus.OK);
   }
 
@@ -93,4 +91,11 @@ public class JunkListController {
     }
     return new ResponseEntity<>(purchase, HttpStatus.CREATED);
   }
+
+
+  @DeleteMapping
+  public void delete(@RequestBody List<JunkList> junkLists) {
+    junkListService.deleteAll(junkLists);
+  }
+
 }

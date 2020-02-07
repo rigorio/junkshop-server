@@ -19,4 +19,6 @@ public interface SaleService<T> {
   T save(T t);
 
   List<T> findByClientId(String clientId);
+
+  void deleteAll(List<T> sales);
 }

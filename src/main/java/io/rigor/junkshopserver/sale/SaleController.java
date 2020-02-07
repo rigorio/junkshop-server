@@ -69,4 +69,9 @@ public class SaleController {
     saleService.deleteById(id);
     return new ResponseEntity<>(null, HttpStatus.OK);
   }
+
+  @DeleteMapping
+  public void delet(@RequestBody List<Sale> sales) {
+    saleService.deleteAll(sales);
+  }
 }

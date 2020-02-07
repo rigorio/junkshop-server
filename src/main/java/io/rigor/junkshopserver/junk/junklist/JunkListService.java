@@ -15,4 +15,6 @@ public interface JunkListService {
   JunkList save(JunkList junkList, String accountId);
 
   List<JunkList> findByClientId(String clientId, String accountId);
+
+  void deleteAll(List<JunkList> junkLists);
 }

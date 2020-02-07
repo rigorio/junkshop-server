@@ -107,6 +107,11 @@ public class DynamoSaleHandler implements SaleService<Sale> {
     return saleRepository.findAllByClientId(clientId);
   }
 
+  @Override
+  public void deleteAll(List<Sale> sales) {
+    saleRepository.deleteAll(sales);
+  }
+
   private <T> List<T> collectAsList(Iterable<T> all) {
     return StreamSupport
         .stream(all.spliterator(), false)
